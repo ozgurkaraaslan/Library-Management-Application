@@ -18,7 +18,6 @@ books = [
                 "subject_category": "Novel",
                 "publication_date": "2010",
                 "physical_address": "AA111",
-                "stock_quantity": 2,
                 "book_state": "Free"
             },
             {
@@ -27,10 +26,19 @@ books = [
                 "author": "Adam Fawer",
                 "subject_category": "Science-Fiction",
                 "publication_date": "2012",
-                "physical_address": "AA112",
-                "stock_quantity": 4,
+                "physical_address": "AA211",
+                "book_state": "Free"
+            },
+            {
+                "title": "Clean Code:A Handbook of Agile Software Craftsmanship",
+                "id": 3,
+                "author": "Robert C. Martin",
+                "subject_category": "Engineering",
+                "publication_date": "2008",
+                "physical_address": "AA311",
                 "book_state": "Free"
             }
+
         ]
 users = [
             {
