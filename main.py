@@ -15,7 +15,13 @@ librarian_col = db["librarian"]
 while 1:
     print("\nWelcome to the Library Management System.")
     print("\n1. User Operations\n2. Librarian Operations\n3. Close Application")
-    input_type = int(input("Choose an option for continue: "))
+    
+    try:
+        input_type = int(input("Choose an option for continue: "))
+    except:
+        print("Invalid input!")
+        continue
+    
     if input_type == 1:
         user = User(users_col, books_col)
 
@@ -39,6 +45,8 @@ while 1:
         else:
             print("Try Again.")
     elif input_type == 3:
-        print("\nApplicaiton is closed. Have a nice day!")
+        print("\nApplication is closed. Have a nice day!")
         break
+    else:
+        print("Invalid input!")
 
