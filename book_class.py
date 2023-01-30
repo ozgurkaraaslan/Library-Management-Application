@@ -1,10 +1,20 @@
+"""
+Module for all book operations
+"""
+
+
 class Book:
+    """Class for all book operations"""
+
     def __init__(self, users_col, books_col, username=""):
         self.books_col = books_col
         self.users_col = users_col
         self.username = username
 
     def book_search(self):
+        """
+        Function for book searching in library database
+        """
         book_search = BookSearch(self.books_col)
 
         print(
@@ -27,6 +37,9 @@ class Book:
             print("Invalid input!")
 
     def book_reserve(self):
+        """
+        Function for book reserving from library
+        """
         _id = int(input("\nInput ID of the book: "))
 
         target_book = None
@@ -43,6 +56,9 @@ class Book:
             print("The book not found.")
 
     def book_occupy(self):
+        """
+        Function for book occupying
+        """
         _id = int(input("\nInput ID of the book: "))
 
         target_book = None
@@ -71,6 +87,9 @@ class Book:
             print("The book not found.")
 
     def book_return(self):
+        """
+        Function for book returning
+        """
         _id = int(input("\nInput ID of the book: "))
 
         target_book = None
@@ -100,10 +119,16 @@ class Book:
             print("The book not found.")
 
     def book_show(self):
+        """
+        Function for monitoring all books in database
+        """
         for data in self.books_col.find({}, {"_id": 0}):
             print(data)
 
     def book_add(self):
+        """
+        Function for add new books to database
+        """
         new_title = input("Title of the new book: ")
         new_author = input("Author of the new book: ")
         id_ = self.books_col.find().sort("id", -1)
@@ -126,16 +151,24 @@ class Book:
         print("The new book is added.")
 
     def book_remove(self):
+        """
+        Function for removing books from database
+        """
         delete_id = int(input("ID of the book: "))
         self.books_col.delete_one({"id": delete_id})
         print("The book is deleted.")
 
 
 class BookSearch:
+    """A sub class for book searching from database"""
+
     def __init__(self, books_col):
         self.books_col = books_col
 
     def search_by_title(self):
+        """
+        Function for searching books according to the book title
+        """
         _input = input("\nInput the title: ")
         data = self.books_col.find({"title": _input}, {"_id": 0})
         _data = None
@@ -145,6 +178,9 @@ class BookSearch:
             print("Book does not exist.")
 
     def search_by_author(self):
+        """
+        Function for searching books according to the book author
+        """
         _input = input("\nInput the author: ")
         data = self.books_col.find({"author": _input}, {"_id": 0})
         _data = None
@@ -154,6 +190,9 @@ class BookSearch:
             print("Book does not exist.")
 
     def search_by_subject_category(self):
+        """
+        Function for searching books according to the book subject category
+        """
         _input = input("\nInput the subject: ")
         data = self.books_col.find({"subject_category": _input}, {"_id": 0})
         _data = None
@@ -163,6 +202,9 @@ class BookSearch:
             print("Book does not exist.")
 
     def search_by_publication_date(self):
+        """
+        Function for searching books according to the book publication date
+        """
         _input = input("\nInput the publication date: ")
         data = self.books_col.find({"publication_date": _input}, {"_id": 0})
         _data = None

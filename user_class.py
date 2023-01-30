@@ -1,7 +1,12 @@
+"""
+Module for library user operations
+"""
+
 from book_class import Book
 
 
 class User:
+    """Class for library user operations"""
     username = ""
 
     def __init__(self, users_col, books_col):
@@ -9,6 +14,9 @@ class User:
         self.books_col = books_col
 
     def user_login(self):
+        """
+        Function for user login process
+        """
         self.username = input("Username: ")
         password = input("Password: ")
         if self.users_col.find_one(
@@ -21,6 +29,9 @@ class User:
             return 0
 
     def user_register(self):
+        """
+        Function for user register process
+        """
         username = input("\nUsername: ")
         password = input("Password: ")
 
@@ -30,6 +41,10 @@ class User:
         print("Sign Up Successfull")
 
     def user_operations(self):
+        """
+        Function for user library actions
+        """
+
         book = Book(self.users_col, self.books_col, self.username)
 
         while 1:

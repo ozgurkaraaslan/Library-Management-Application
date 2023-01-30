@@ -1,19 +1,35 @@
-import pymongo
+"""Library management application for libraries.
+
+Library users can access library database through this application and 
+realize their operations according to the limitations. Library admin can 
+reach all database and can manage the library system. An authentication is 
+required for all.
+"""
+
+import pymongo  # library for mongodb database usage
 from user_class import User
 from librarian_class import Librarian
 
+# libraries for user and librarian classes
+
 username = "rebelkrone"
 password = "JqlXmO7xuMhkDAoM"
+# database authentication parameters
 
 client = pymongo.MongoClient(
     f"mongodb+srv://{username}:{password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
-)
+)  # database connection establishing
+
 db = client["mydatabase"]
 books_col = db["books"]
 users_col = db["users"]
 librarian_col = db["librarian"]
+# database collection connections
 
 while 1:
+    """
+    Loop for user interface
+    """
     print("\nWelcome to the Library Management System.")
     print("\n1. User Operations\n2. Librarian Operations\n3. Close Application")
 

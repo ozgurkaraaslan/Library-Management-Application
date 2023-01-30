@@ -1,13 +1,22 @@
+"""
+Module for library admin (librarian) operations
+"""
+
 from book_class import Book
 
 
 class Librarian:
+    """Class for librarian operations"""
+
     def __init__(self, librarian_col, books_col, users_col):
         self.librarian_col = librarian_col
         self.books_col = books_col
         self.users_col = users_col
 
     def librarian_login(self):
+        """
+        Function for librarian login process
+        """
         librarian_password = input("Password: ")
 
         if librarian_password == self.librarian_col.find_one()["librarian_password"]:
@@ -18,6 +27,9 @@ class Librarian:
             return 0
 
     def librarian_operations(self):
+        """
+        Function for librarian actions
+        """
         book = Book(self.users_col, self.books_col)
 
         while 1:
