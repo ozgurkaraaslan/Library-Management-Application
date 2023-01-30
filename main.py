@@ -6,7 +6,9 @@ from librarian_class import Librarian
 username = "rebelkrone"
 password = "JqlXmO7xuMhkDAoM"
 
-client = pymongo.MongoClient(f"mongodb+srv://{username}:{password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient(
+    f"mongodb+srv://{username}:{password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
+)
 db = client["mydatabase"]
 books_col = db["books"]
 users_col = db["users"]
@@ -15,13 +17,12 @@ librarian_col = db["librarian"]
 while 1:
     print("\nWelcome to the Library Management System.")
     print("\n1. User Operations\n2. Librarian Operations\n3. Close Application")
-    
+
     try:
         input_type = int(input("Choose an option for continue: "))
     except:
         print("Invalid input!")
         continue
-    
     if input_type == 1:
         user = User(users_col, books_col)
 
@@ -35,8 +36,7 @@ while 1:
             else:
                 print("Try Again.")
         elif input_type == 2:
-            user.user_register()       
-            
+            user.user_register()
     elif input_type == 2:
         librarian = Librarian(librarian_col, books_col, users_col)
 
@@ -49,4 +49,3 @@ while 1:
         break
     else:
         print("Invalid input!")
-
