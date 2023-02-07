@@ -13,7 +13,7 @@ class Librarian:
         self.books_col = books_col
         self.users_col = users_col
 
-    def librarian_login(self):
+    def login(self):
         """
         Function for librarian login process
         """
@@ -26,7 +26,7 @@ class Librarian:
             print("Login is not successfull!")
             return 0
 
-    def librarian_operations(self):
+    def operations(self):
         """
         Function for librarian actions
         """
@@ -43,14 +43,14 @@ class Librarian:
                 print("Invalid input!")
                 continue
             if librarian_action == 1:
-                book.book_show()
+                book.show()
             elif librarian_action == 2:
                 for data in self.users_col.find({}, {"_id": 0}):
                     print(data)
             elif librarian_action == 3:
-                book.book_add()
+                book.add()
             elif librarian_action == 4:
-                book.book_remove()
+                book.remove()
             elif librarian_action == 5:
                 print("Logged out.")
                 return 1

@@ -11,11 +11,11 @@ class Book:
         self.users_col = users_col
         self.username = username
 
-    def book_search(self):
+    def search(self):
         """
         Function for book searching in library database
         """
-        book_search = BookSearch(self.books_col)
+        search = BookSearch(self.books_col)
 
         print(
             "\n1. Search books by title\n2. Search books by author\n3. Search books by subject category\n4. Search books by publication date"
@@ -26,17 +26,17 @@ class Book:
             print("Invalid input!")
             return 0
         if user_action == 1:
-            book_search.search_by_title()
+            search.title()
         elif user_action == 2:
-            book_search.search_by_author()
+            search.author()
         elif user_action == 3:
-            book_search.search_by_subject_category()
+            search.subject_category()
         elif user_action == 4:
-            book_search.search_by_publication_date()
+            search.publication_date()
         else:
             print("Invalid input!")
 
-    def book_reserve(self):
+    def reserve(self):
         """
         Function for book reserving from library
         """
@@ -55,7 +55,7 @@ class Book:
         else:
             print("The book not found.")
 
-    def book_occupy(self):
+    def occupy(self):
         """
         Function for book occupying
         """
@@ -86,7 +86,7 @@ class Book:
         else:
             print("The book not found.")
 
-    def book_return(self):
+    def return_(self):
         """
         Function for book returning
         """
@@ -118,14 +118,14 @@ class Book:
         else:
             print("The book not found.")
 
-    def book_show(self):
+    def show(self):
         """
         Function for monitoring all books in database
         """
         for data in self.books_col.find({}, {"_id": 0}):
             print(data)
 
-    def book_add(self):
+    def add(self):
         """
         Function for add new books to database
         """
@@ -150,7 +150,7 @@ class Book:
         self.books_col.insert_one(new_book)
         print("The new book is added.")
 
-    def book_remove(self):
+    def remove(self):
         """
         Function for removing books from database
         """
@@ -165,7 +165,7 @@ class BookSearch:
     def __init__(self, books_col):
         self.books_col = books_col
 
-    def search_by_title(self):
+    def title(self):
         """
         Function for searching books according to the book title
         """
@@ -177,7 +177,7 @@ class BookSearch:
         if not _data:
             print("Book does not exist.")
 
-    def search_by_author(self):
+    def author(self):
         """
         Function for searching books according to the book author
         """
@@ -189,7 +189,7 @@ class BookSearch:
         if not _data:
             print("Book does not exist.")
 
-    def search_by_subject_category(self):
+    def subject_category(self):
         """
         Function for searching books according to the book subject category
         """
@@ -201,7 +201,7 @@ class BookSearch:
         if not _data:
             print("Book does not exist.")
 
-    def search_by_publication_date(self):
+    def publication_date(self):
         """
         Function for searching books according to the book publication date
         """

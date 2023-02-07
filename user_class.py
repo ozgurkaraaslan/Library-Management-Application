@@ -13,7 +13,7 @@ class User:
         self.users_col = users_col
         self.books_col = books_col
 
-    def user_login(self):
+    def login(self):
         """
         Function for user login process
         """
@@ -28,7 +28,7 @@ class User:
             print("Login is not successfull!")
             return 0
 
-    def user_register(self):
+    def register(self):
         """
         Function for user register process
         """
@@ -40,7 +40,7 @@ class User:
         )
         print("Sign Up Successfull")
 
-    def user_operations(self):
+    def operations(self):
         """
         Function for user library actions
         """
@@ -58,13 +58,13 @@ class User:
                 print("Invalid input!")
                 continue
             if user_action == 1:
-                book.book_search()
+                book.search()
             elif user_action == 2:
-                book.book_reserve()
+                book.reserve()
             elif user_action == 3:
-                book.book_occupy()
+                book.occupy()
             elif user_action == 4:
-                book.book_return()
+                book.return_()
             elif user_action == 5:
                 print("Successfully logged out.")
                 break

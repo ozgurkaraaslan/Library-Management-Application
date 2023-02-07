@@ -45,18 +45,18 @@ while 1:
         input_type = int(input("Choose an option for continue: "))
 
         if input_type == 1:
-            if user.user_login():
-                user.user_operations()
+            if user.login():
+                user.operations()
                 continue
             else:
                 print("Try Again.")
         elif input_type == 2:
-            user.user_register()
+            user.register()
     elif input_type == 2:
         librarian = Librarian(librarian_col, books_col, users_col)
 
-        if librarian.librarian_login():
-            librarian.librarian_operations()
+        if librarian.login():
+            librarian.operations()
         else:
             print("Try Again.")
     elif input_type == 3:
