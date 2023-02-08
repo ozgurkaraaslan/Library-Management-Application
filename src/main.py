@@ -7,13 +7,17 @@ required for all.
 """
 
 import pymongo  # library for mongodb database usage
+import json
 from classes.user_class import User
 from classes.librarian_class import Librarian
 
 # libraries for user and librarian classes
 
-username = "rebelkrone"
-password = "JqlXmO7xuMhkDAoM"
+with open('config/db_auth.json') as file:
+    data = json.load(file)
+
+username = data["username"]
+password = data["password"]
 # database authentication parameters
 
 client = pymongo.MongoClient(

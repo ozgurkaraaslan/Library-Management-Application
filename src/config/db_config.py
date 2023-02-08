@@ -1,7 +1,11 @@
 import pymongo
+import json
 
-username = "rebelkrone"
-password = "JqlXmO7xuMhkDAoM"
+with open('db_auth.json') as file:
+    data = json.load(file)
+
+username = data["username"]
+password = data["password"]
 
 client = pymongo.MongoClient(f"mongodb+srv://{username}:{password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority")
 
