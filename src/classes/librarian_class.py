@@ -20,40 +20,43 @@ class Librarian:
         librarian_password = input("Password: ")
 
         if librarian_password == self.librarian_col.find_one()["librarian_password"]:
-            print("Login is successfull.")
             return 1
         else:
-            print("Login is not successfull!")
             return 0
 
-    def operations(self):
+    def operations(self, librarian_action):
         """
         Function for librarian actions
         """
         book = Book(self.users_col, self.books_col)
+        
+        if librarian_action == 1:
+            return book.show()
 
-        while 1:
-            print(
-                "\n1. Show All Books\n2. Show All Users\n3. Add a Book\n4. Remove a Book\n5. Log Out"
-            )
+        elif librarian_action == 2:
+            msg = []
+            for data in self.users_col.find({}, {"_id": 0}):
+                msg.append(data)
+            return msg
 
+        elif librarian_action == 3:
             try:
-                librarian_action = int(input("Choose an option for continue: "))
+                title = input("Title of the new book: ")
+                author = input("Author of the new book: ")
+                subject_category = input("Subject category of the new book: ")
+                publication_date = input("Publication date of the new book: ")
+                physical_address = input("Physical address of the new book: ")
             except:
-                print("Invalid input!")
-                continue
-            if librarian_action == 1:
-                book.show()
-            elif librarian_action == 2:
-                for data in self.users_col.find({}, {"_id": 0}):
-                    print(data)
-            elif librarian_action == 3:
-                book.add()
-            elif librarian_action == 4:
-                book.remove()
-            elif librarian_action == 5:
-                print("Logged out.")
-                return 1
-            else:
-                print("Invalid input. Try Again.")
-            input("\nPress enter to continue: ")
+                return 99
+            return book.add(title, author, subject_category, publication_date, physical_address)
+
+        elif librarian_action == 4:
+            try:
+                delete_id = int(input("ID of the book: "))
+            except:
+                return 99
+            return book.remove(delete_id)
+        elif librarian_action == 5:
+            return 100
+        else:
+            return 99

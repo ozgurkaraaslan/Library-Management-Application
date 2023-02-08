@@ -11,61 +11,62 @@ class Book:
         self.users_col = users_col
         self.username = username
 
-    def search(self):
+    def search(self, book_action):
         """
         Function for book searching in library database
         """
         search = BookSearch(self.books_col)
+        
+        if book_action == 1:
+            title = input("\nInput the title: ")
+            return search.title(title)
 
-        print(
-            "\n1. Search books by title\n2. Search books by author\n3. Search books by subject category\n4. Search books by publication date"
-        )
-        try:
-            user_action = int(input("Choose an option for continue: "))
-        except:
-            print("Invalid input!")
-            return 0
-        if user_action == 1:
-            search.title()
-        elif user_action == 2:
-            search.author()
-        elif user_action == 3:
-            search.subject_category()
-        elif user_action == 4:
-            search.publication_date()
+        elif book_action == 2:
+            author = input("\nInput the author: ")
+            return search.author(author)
+
+        elif book_action == 3:
+            subject_category = input("\nInput the subject: ")
+            return search.subject_category(subject_category)
+
+        elif book_action == 4:
+            publication_date = input("\nInput the publication date: ")
+            return search.publication_date(publication_date)
+            
         else:
-            print("Invalid input!")
+            return 99
 
-    def reserve(self):
+    def reserve(self, _id):
         """
         Function for book reserving from library
         """
-        _id = int(input("\nInput ID of the book: "))
+        msg = ""
 
         target_book = None
         target_book = self.books_col.find_one({"id": _id})
         if target_book:
             if target_book["book_state"] == ("Reserved" or "Occupied"):
-                print("The book is not free.")
+                msg = "The book is not free."
             else:
                 _filter = {"id": _id}
                 _newvalues = {"$set": {"book_state": "Reserved"}}
                 self.books_col.update_one(_filter, _newvalues)
-                print("The book is reserved successfully.")
+                msg = "The book is reserved successfully."
         else:
-            print("The book not found.")
-
-    def occupy(self):
+            msg = "The book not found."
+        return msg
+        
+    def occupy(self, _id):
         """
         Function for book occupying
         """
-        _id = int(input("\nInput ID of the book: "))
+        msg = ""
 
         target_book = None
         target_book = self.books_col.find_one({"id": _id})
         if target_book:
             if target_book["book_state"] == "Occupied":
-                print("The book is not free.")
+                msg = "The book is not free."
             else:
                 user_occupied_books = (
                     self.users_col.find_one({"username": self.username})
@@ -80,17 +81,18 @@ class Book:
                     book_filter = {"id": _id}
                     book_newvalue = {"$set": {"book_state": "Occupied"}}
                     self.books_col.update_one(book_filter, book_newvalue)
-                    print("The book is occupied.")
+                    msg = "The book is occupied successfully."
                 else:
-                    print("Maximum number of occupied book cannot be higher than 5!")
+                    msg ="Maximum number of occupied book cannot be higher than 5!"
         else:
-            print("The book not found.")
+            msg = "The book not found."
+        return msg
 
-    def return_(self):
+    def return_(self, _id):
         """
         Function for book returning
         """
-        _id = int(input("\nInput ID of the book: "))
+        msg = ""
 
         target_book = None
         target_book = self.books_col.find_one({"id": _id})
@@ -110,53 +112,54 @@ class Book:
                     book_filter = {"id": _id}
                     book_newvalue = {"$set": {"book_state": "Free"}}
                     self.books_col.update_one(book_filter, book_newvalue)
-                    print("The book is returned succesfully.")
+                    msg = "The book is returned succesfully."
                 else:
-                    print("The book has not occupied by current user.")
+                    msg = "The book has not occupied by current user."
             else:
-                print("The book is already free.")
+                msg = "The book is already free."
         else:
-            print("The book not found.")
+           msg = "The book not found."
+        return msg
 
     def show(self):
         """
         Function for monitoring all books in database
         """
+        msg = []
         for data in self.books_col.find({}, {"_id": 0}):
-            print(data)
+            msg.append(data)
+        return msg
 
-    def add(self):
+    def add(self, title, author, subject_category, publication_date, physical_address, book_state = "Free"):
         """
         Function for add new books to database
         """
-        new_title = input("Title of the new book: ")
-        new_author = input("Author of the new book: ")
+        msg = ""
         id_ = self.books_col.find().sort("id", -1)
-        new_id = id_[0]["id"] + 1
-        new_subject_category = input("Subject category of the new book: ")
-        new_publication_date = input("Publication date of the new book: ")
-        new_physical_address = input("Physical address of the new book: ")
-        new_book_state = "Free"
+        _id = id_[0]["id"] + 1
 
-        new_book = {
-            "title": new_title,
-            "id": new_id,
-            "author": new_author,
-            "subject_category": new_subject_category,
-            "publication_date": new_publication_date,
-            "physical_address": new_physical_address,
-            "book_state": "Free",
+        book = {
+            "title": title,
+            "id": _id,
+            "author": author,
+            "subject_category": subject_category,
+            "publication_date": publication_date,
+            "physical_address": physical_address,
+            "book_state": book_state
         }
-        self.books_col.insert_one(new_book)
-        print("The new book is added.")
+        self.books_col.insert_one(book)
 
-    def remove(self):
+        msg ="The new book is added."
+        return msg
+
+    def remove(self, delete_id):
         """
         Function for removing books from database
         """
-        delete_id = int(input("ID of the book: "))
+        msg = ""
         self.books_col.delete_one({"id": delete_id})
-        print("The book is deleted.")
+        msg = "The book is deleted."
+        return msg
 
 
 class BookSearch:
@@ -165,50 +168,65 @@ class BookSearch:
     def __init__(self, books_col):
         self.books_col = books_col
 
-    def title(self):
+    def title(self, title):
         """
         Function for searching books according to the book title
         """
-        _input = input("\nInput the title: ")
-        data = self.books_col.find({"title": _input}, {"_id": 0})
+        msg = []
+        data = self.books_col.find({"title": title}, {"_id": 0})
         _data = None
+        
         for _data in data:
-            print(_data)
-        if not _data:
-            print("Book does not exist.")
+            msg.append(_data)
 
-    def author(self):
+        if not _data:
+            return "Book does not exist."
+        else:
+            return msg
+
+    def author(self, author):
         """
         Function for searching books according to the book author
         """
-        _input = input("\nInput the author: ")
-        data = self.books_col.find({"author": _input}, {"_id": 0})
+        msg = []
+        data = self.books_col.find({"author": author}, {"_id": 0})
         _data = None
-        for _data in data:
-            print(_data)
-        if not _data:
-            print("Book does not exist.")
 
-    def subject_category(self):
+        for _data in data:
+            msg.append(_data)
+
+        if not _data:
+            return "Book does not exist."
+        else:
+            return msg
+
+    def subject_category(self, subject_category):
         """
         Function for searching books according to the book subject category
         """
-        _input = input("\nInput the subject: ")
-        data = self.books_col.find({"subject_category": _input}, {"_id": 0})
+        msg = []
+        
+        data = self.books_col.find({"subject_category": subject_category}, {"_id": 0})
         _data = None
         for _data in data:
-            print(_data)
-        if not _data:
-            print("Book does not exist.")
+            msg.append(_data)
 
-    def publication_date(self):
+        if not _data:
+            return "Book does not exist."
+        else:
+            return msg
+
+    def publication_date(self, publication_date):
         """
         Function for searching books according to the book publication date
         """
-        _input = input("\nInput the publication date: ")
-        data = self.books_col.find({"publication_date": _input}, {"_id": 0})
+        msg = []
+        data = self.books_col.find({"publication_date": publication_date}, {"_id": 0})
         _data = None
         for _data in data:
-            print(_data)
+            msg.append(_data)
+
         if not _data:
-            print("Book does not exist.")
+            return "Book does not exist."
+        else:
+            return msg

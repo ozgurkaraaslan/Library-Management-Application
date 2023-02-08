@@ -13,62 +13,70 @@ class User:
         self.users_col = users_col
         self.books_col = books_col
 
-    def login(self):
+    def login(self, username, password):
         """
         Function for user login process
         """
-        self.username = input("Username: ")
-        password = input("Password: ")
+        self.username = username
         if self.users_col.find_one(
             {"$and": [{"username": self.username}, {"password": password}]}
         ):
-            print("Login is succesfull.")
             return 1
         else:
-            print("Login is not successfull!")
             return 0
 
-    def register(self):
+    def register(self, username, password):
         """
         Function for user register process
         """
-        username = input("\nUsername: ")
-        password = input("Password: ")
+        try:
+            self.users_col.insert_one(
+                {"username": username, "password": password, "occupied_books": [-1]}
+            )
+            return 1
+        except:
+            return 0
 
-        self.users_col.insert_one(
-            {"username": username, "password": password, "occupied_books": [-1]}
-        )
-        print("Sign Up Successfull")
-
-    def operations(self):
+    def operations(self, user_action):
         """
         Function for user library actions
         """
 
         book = Book(self.users_col, self.books_col, self.username)
 
-        while 1:
+        if user_action == 1:
             print(
-                "\n1. Search books\n2. Reserve a book \n3. Occupy a book\n4. Return a book \n5. Log out"
+                "\n1. Search books by title\n2. Search books by author\n3. Search books by subject category\n4. Search books by publication date"
             )
-
             try:
                 user_action = int(input("Choose an option for continue: "))
             except:
-                print("Invalid input!")
-                continue
-            if user_action == 1:
-                book.search()
-            elif user_action == 2:
-                book.reserve()
-            elif user_action == 3:
-                book.occupy()
-            elif user_action == 4:
-                book.return_()
-            elif user_action == 5:
-                print("Successfully logged out.")
-                break
-            else:
-                print("Invalid input!")
-            input("\nPress enter to continue: ")
-        return 0
+                return 99
+            return book.search(user_action)
+
+        elif user_action == 2:
+            try:
+                _id = int(input("\nInput ID of the book: "))
+            except:
+                return 99
+            return book.reserve(_id)
+
+        elif user_action == 3:
+            try:
+                _id = int(input("\nInput ID of the book: "))
+            except:
+                return 99
+            return book.occupy(_id)
+
+        elif user_action == 4:
+            try:
+                _id = int(input("\nInput ID of the book: "))
+            except:
+                return 99
+            return book.return_(_id)
+
+        elif user_action == 5:
+            return 100
+
+        else:
+            return 99
