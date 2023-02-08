@@ -13,7 +13,8 @@ from classes.librarian_class import Librarian
 
 # libraries for user and librarian classes
 
-with open('config/db_auth.json') as file:
+
+with open("config/db_auth.json") as file:
     data = json.load(file)
 
 username = data["username"]

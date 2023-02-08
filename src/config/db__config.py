@@ -1,7 +1,7 @@
 import pymongo
 import json
 
-with open('db_auth.json') as file:
+with open("config/db_auth.json") as file:
     data = json.load(file)
 
 username = data["username"]
