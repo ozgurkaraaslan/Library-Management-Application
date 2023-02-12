@@ -11,6 +11,7 @@ import json
 
 from classes.user_class import User
 from classes.librarian_class import Librarian
+
 # libraries for user and librarian classes
 
 with open("config/db_auth.json") as file:
@@ -30,6 +31,7 @@ users_col = db["users"]
 librarian_col = db["librarian"]
 # database collection connections
 
+
 def user_func():
     user = User(users_col, books_col)
 
@@ -40,8 +42,12 @@ def user_func():
         username = input("\nUsername: ")
         password = input("Password: ")
 
-        if user.login(username, password):
-            print("Login is succesfull.")
+        response = user.login(username, password)
+        if not response["status"]:
+            print(response["message"])
+
+        else:
+            print("\n", response["message"])
 
             while 1:
                 print(
@@ -53,67 +59,64 @@ def user_func():
                     print("Invalid input!")
                     continue
 
-                res = user.operations(user_action)
-                
-                if type(res) == str:
-                    print(res)
-                elif type(res) == list:
-                    for i in res:
-                        print(i)
-                else:   
-                    if res == 99:
-                        print("Invalid input!")
-                    elif res == 100:
-                        print("Successfully logged out.")
-                        break
+                response = user.operations(user_action)
+
+                print(response["message"])
+
+                if response["status"] == 100:
+                    break
+                if "data" in response.keys():
+                    print("\nResult: ")
+                    for _data in response["data"]:
+                        print(_data)
+
                 input("\nPress enter to continue: ")
 
-        else:
-            print("Login is not successfull!")
-            print("Try Again.")
-            
     elif input_type == 2:
         username = input("\nUsername: ")
         password = input("Password: ")
 
-        if user.register(username, password):
-            print("Sign Up is successfull.")
+        response = user.register(username, password)
+        if response["status"]:
+            print(response["message"])
         else:
-            print("Sign Up is not succesfull.")
+            print(response["message"])
+
 
 def librarian_func():
     librarian = Librarian(librarian_col, books_col, users_col)
 
-    if librarian.login():
-        print("Login is successfull.")
+    response = librarian.login()
+    if not response["status"]:
+        print(response["message"])
+
+    else:
+        print(response["message"])
 
         while 1:
-            print("\n1. Show All Books\n2. Show All Users\n3. Add a Book\n4. Remove a Book\n5. Log Out")
+            print(
+                "\n1. Show All Books\n2. Show All Users\n3. Add a Book\n4. Remove a Book\n5. Log Out"
+            )
 
             try:
                 librarian_action = int(input("Choose an option for continue: "))
             except:
                 print("Invalid input!")
                 continue
-            
-            res = librarian.operations(librarian_action)
 
-            if type(res) == str:
-                print(res)
-            elif type(res) == list:
-                for i in res:
-                    print(i)
-            else:   
-                if res == 99:
-                    print("Invalid input!")
-                elif res == 100:
-                    print("Successfully logged out.")
-                    break
+            response = librarian.operations(librarian_action)
+
+            print("\n", response["message"])
+
+            if response["status"] == 100:
+                break
+            if "data" in response.keys() and (response["status"] != 0):
+                print("\nResult: ")
+                for _data in response["data"]:
+                    print(_data)
+
             input("\nPress enter to continue: ")
-            
-    else:
-        print("Login is not successfull!")
-        print("Try Again.")
+
 
 while 1:
     """
@@ -138,3 +141,5 @@ while 1:
         break
     else:
         print("Invalid input!")
+
+    input("\nPress enter to continue: ")

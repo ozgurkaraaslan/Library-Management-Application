@@ -20,25 +20,31 @@ class Librarian:
         librarian_password = input("Password: ")
 
         if librarian_password == self.librarian_col.find_one()["librarian_password"]:
-            return 1
+            return {"status": 1, "message": "Login is successful."}
         else:
-            return 0
+            return {"status": 0, "message": "Login is not successful."}
 
     def operations(self, librarian_action):
         """
         Function for librarian actions
         """
         book = Book(self.users_col, self.books_col)
-        
+
         if librarian_action == 1:
             return book.show()
 
         elif librarian_action == 2:
             msg = []
-            for data in self.users_col.find({}, {"_id": 0}):
-                msg.append(data)
-            return msg
-
+            try:
+                for data in self.users_col.find({}, {"_id": 0}):
+                    msg.append(data)
+                return {"status": 1, "message": "All the users are listed", "data": msg}
+            except:
+                return {
+                    "status": 0,
+                    "message": "The users could not be listed.",
+                    "data": [],
+                }
         elif librarian_action == 3:
             try:
                 title = input("Title of the new book: ")
@@ -47,16 +53,18 @@ class Librarian:
                 publication_date = input("Publication date of the new book: ")
                 physical_address = input("Physical address of the new book: ")
             except:
-                return 99
-            return book.add(title, author, subject_category, publication_date, physical_address)
+                return {"status": 99, "message": "Invalid input!"}
+            return book.add(
+                title, author, subject_category, publication_date, physical_address
+            )
 
         elif librarian_action == 4:
             try:
                 delete_id = int(input("ID of the book: "))
             except:
-                return 99
+                return {"status": 99, "message": "Invalid input!"}
             return book.remove(delete_id)
         elif librarian_action == 5:
-            return 100
+            return {"status": 100, "message": "Logged out"}
         else:
-            return 99
+            return {"status": 99, "message": "Invalid input!"}

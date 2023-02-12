@@ -7,6 +7,7 @@ from classes.book_class import Book
 
 class User:
     """Class for library user operations"""
+
     username = ""
 
     def __init__(self, users_col, books_col):
@@ -21,9 +22,9 @@ class User:
         if self.users_col.find_one(
             {"$and": [{"username": self.username}, {"password": password}]}
         ):
-            return 1
+            return {"status": 1, "message": "Login is successful."}
         else:
-            return 0
+            return {"status": 0, "message": "Login is not successful."}
 
     def register(self, username, password):
         """
@@ -33,9 +34,9 @@ class User:
             self.users_col.insert_one(
                 {"username": username, "password": password, "occupied_books": [-1]}
             )
-            return 1
+            return {"status": 1, "message": "Sign up is successful."}
         except:
-            return 0
+            return {"status": 0, "message": "Sign up is not successful."}
 
     def operations(self, user_action):
         """
@@ -51,32 +52,32 @@ class User:
             try:
                 user_action = int(input("Choose an option for continue: "))
             except:
-                return 99
+                return {"status": 99, "message": "Invalid input!"}
             return book.search(user_action)
 
         elif user_action == 2:
             try:
                 _id = int(input("\nInput ID of the book: "))
             except:
-                return 99
+                return {"status": 99, "message": "Invalid input!"}
             return book.reserve(_id)
 
         elif user_action == 3:
             try:
                 _id = int(input("\nInput ID of the book: "))
             except:
-                return 99
+                return {"status": 99, "message": "Invalid input!"}
             return book.occupy(_id)
 
         elif user_action == 4:
             try:
                 _id = int(input("\nInput ID of the book: "))
             except:
-                return 99
+                return {"status": 99, "message": "Invalid input!"}
             return book.return_(_id)
 
         elif user_action == 5:
-            return 100
+            return {"status": 100, "message": "Logged out."}
 
         else:
-            return 99
+            return {"status": 99, "message": "Invalid input!"}
