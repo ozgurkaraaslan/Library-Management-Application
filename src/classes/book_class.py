@@ -13,7 +13,17 @@ class Book:
 
     def search(self, book_action):
         """
-        Function for searching books in the database
+        Function for searching books from database
+
+        Parameters
+        ----------
+        book_action: int, default: None
+            Number of user operation choice
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         search = BookSearch(self.books_col)
 
@@ -34,11 +44,21 @@ class Book:
             return search.publication_date(publication_date)
 
         else:
-            return {"status": 99, "message": "Invalid input!"}
+            return {"status": 3, "message": "Invalid input!"}
 
     def reserve(self, _id):
         """
-        Function for book reserving from library
+        Function for book reserving operation
+
+        Parameters
+        ----------
+        _id: int, default: None
+            ID number of the book to reserve
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
         msg = ""
 
@@ -61,7 +81,17 @@ class Book:
 
     def occupy(self, _id):
         """
-        Function for book occupying
+        Function for book occupying operation
+
+        Parameters
+        ----------
+        _id: int, default: None
+            ID number of the book to occupy
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
         msg = ""
 
@@ -98,7 +128,17 @@ class Book:
 
     def return_(self, _id):
         """
-        Function for book returning
+        Function for book returning operation
+
+        Parameters
+        ----------
+        _id: int, default: None
+            ID number of the book to return
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
         msg = ""
 
@@ -136,6 +176,11 @@ class Book:
     def show(self):
         """
         Function for monitoring all books in database
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         msg = []
         try:
@@ -160,6 +205,11 @@ class Book:
     ):
         """
         Function for add new books to database
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
         msg = ""
         id_ = self.books_col.find().sort("id", -1)
@@ -185,6 +235,16 @@ class Book:
     def remove(self, delete_id):
         """
         Function for removing books from database
+
+        Parameters
+        ----------
+        delete_id: int, default: None
+            ID number of the book to delete from database
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
         msg = ""
         try:
@@ -203,6 +263,16 @@ class BookSearch:
     def title(self, title):
         """
         Function for searching books according to the book title
+
+        Parameters
+        ----------
+        title: str, default: None
+            Title of the book that will be searched
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         msg = []
         data = self.books_col.find({"title": title}, {"_id": 0})
@@ -219,6 +289,16 @@ class BookSearch:
     def author(self, author):
         """
         Function for searching books according to the book author
+
+        Parameters
+        ----------
+        author: str, default: None
+            Author of the book that will be searched
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         msg = []
         data = self.books_col.find({"author": author}, {"_id": 0})
@@ -235,6 +315,16 @@ class BookSearch:
     def subject_category(self, subject_category):
         """
         Function for searching books according to the book subject category
+
+        Parameters
+        ----------
+        subject_category: str, default: None
+            Subject category of the book that will be searched
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         msg = []
 
@@ -251,6 +341,16 @@ class BookSearch:
     def publication_date(self, publication_date):
         """
         Function for searching books according to the book publication date
+
+        Parameters
+        ----------
+        publication_date: str, default: None
+            Publication date of the book that will be searched
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" keys
         """
         msg = []
         data = self.books_col.find({"publication_date": publication_date}, {"_id": 0})

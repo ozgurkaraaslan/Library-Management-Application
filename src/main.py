@@ -2,12 +2,12 @@
 
 Library users can access library database through this application and 
 realize their operations according to the limitations. Library admin can 
-reach all database and can manage the library system. An authentication is 
-required for all.
+reach all database and manage the library system. Authentication is 
+required for operations.
 """
 
 import pymongo  # library for mongodb database usage
-import json
+import json  # library for json operations
 
 from classes.user_class import User
 from classes.librarian_class import Librarian
@@ -33,6 +33,9 @@ librarian_col = db["librarian"]
 
 
 def user_func():
+    """
+    Function to monitoring and managing all user operations
+    """
     user = User(users_col, books_col)
 
     print("\n1. User Login\n2. User Sign Up")
@@ -47,7 +50,7 @@ def user_func():
             print(response["message"])
 
         else:
-            print("\n", response["message"])
+            print("\n" + response["message"])
 
             while 1:
                 print(
@@ -63,7 +66,7 @@ def user_func():
 
                 print(response["message"])
 
-                if response["status"] == 100:
+                if response["status"] == 4:
                     break
                 if "data" in response.keys():
                     print("\nResult: ")
@@ -84,9 +87,13 @@ def user_func():
 
 
 def librarian_func():
+    """
+    Function to monitoring and managing all librarian operations
+    """
     librarian = Librarian(librarian_col, books_col, users_col)
 
-    response = librarian.login()
+    password = input("Password: ")
+    response = librarian.login(password)
     if not response["status"]:
         print(response["message"])
 
@@ -106,9 +113,9 @@ def librarian_func():
 
             response = librarian.operations(librarian_action)
 
-            print("\n", response["message"])
+            print("\n" + response["message"])
 
-            if response["status"] == 100:
+            if response["status"] == 4:
                 break
             if "data" in response.keys() and (response["status"] != 0):
                 print("\nResult: ")

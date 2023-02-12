@@ -13,11 +13,20 @@ class Librarian:
         self.books_col = books_col
         self.users_col = users_col
 
-    def login(self):
+    def login(self, librarian_password):
         """
         Function for librarian login process
+
+        Parameters
+        ----------
+        librarian_password: int, default: None
+            Password of the librarian for login operation
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status" and "message" keys
         """
-        librarian_password = input("Password: ")
 
         if librarian_password == self.librarian_col.find_one()["librarian_password"]:
             return {"status": 1, "message": "Login is successful."}
@@ -27,6 +36,16 @@ class Librarian:
     def operations(self, librarian_action):
         """
         Function for librarian actions
+
+        Parameters
+        ----------
+        librarian_action: int, default: None
+            Number of librarian operation choice
+
+        Returns
+        -------
+        dict
+            Dictionary that includes "status", "message" and "data" (optional) keys
         """
         book = Book(self.users_col, self.books_col)
 
@@ -53,7 +72,7 @@ class Librarian:
                 publication_date = input("Publication date of the new book: ")
                 physical_address = input("Physical address of the new book: ")
             except:
-                return {"status": 99, "message": "Invalid input!"}
+                return {"status": 3, "message": "Invalid input!"}
             return book.add(
                 title, author, subject_category, publication_date, physical_address
             )
@@ -62,9 +81,9 @@ class Librarian:
             try:
                 delete_id = int(input("ID of the book: "))
             except:
-                return {"status": 99, "message": "Invalid input!"}
+                return {"status": 3, "message": "Invalid input!"}
             return book.remove(delete_id)
         elif librarian_action == 5:
-            return {"status": 100, "message": "Logged out"}
+            return {"status": 4, "message": "Logged out"}
         else:
-            return {"status": 99, "message": "Invalid input!"}
+            return {"status": 3, "message": "Invalid input!"}
