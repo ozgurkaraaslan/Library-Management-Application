@@ -7,7 +7,7 @@ required for operations.
 """
 
 import pymongo  # library for mongodb database usage
-import json  # library for json operations
+import yaml  # library for yaml operations
 
 from src.classes.user import User
 from src.classes.librarian import Librarian
@@ -15,8 +15,8 @@ from src.classes.status import Status
 
 # library imports for user, librarian and status classes
 
-with open("src/config/db_auth.json") as file:
-    data = json.load(file)
+with open("db_auth.yaml") as file:
+    data = yaml.safe_load(file)
 
 username = data["username"]
 password = data["password"]
