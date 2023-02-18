@@ -2,7 +2,7 @@
 Module for library user operations
 """
 
-from classes.book_class import Book
+from src.classes.book import Book
 
 
 class User:

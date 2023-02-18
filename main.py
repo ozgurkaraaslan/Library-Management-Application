@@ -9,12 +9,12 @@ required for operations.
 import pymongo  # library for mongodb database usage
 import json  # library for json operations
 
-from classes.user_class import User
-from classes.librarian_class import Librarian
+from src.classes.user import User
+from src.classes.librarian import Librarian
 
 # libraries for user and librarian classes
 
-with open("config/db_auth.json") as file:
+with open("src/config/db_auth.json") as file:
     data = json.load(file)
 
 username = data["username"]
