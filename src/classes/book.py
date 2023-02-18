@@ -216,7 +216,6 @@ class Book:
         dict
             Dictionary that includes "status" and "message" keys
         """
-        msg = ""
         id_ = self.books_col.find().sort("id", -1)
         _id = id_[0]["id"] + 1
 
@@ -254,7 +253,6 @@ class Book:
         dict
             Dictionary that includes "status" and "message" keys
         """
-        msg = ""
         try:
             self.books_col.delete_one({"id": delete_id})
             return {"status": Status.Success, "message": "The book is deleted."}

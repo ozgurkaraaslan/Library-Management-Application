@@ -15,15 +15,15 @@ from src.classes.status import Status
 
 # library imports for user, librarian and status classes
 
-with open("db_auth.yaml") as file:
+with open("db_auth.yaml", encoding="utf8") as file:
     data = yaml.safe_load(file)
 
-username = data["username"]
-password = data["password"]
+db_username = data["username"]
+db_password = data["password"]
 # database authentication parameters
 
 client = pymongo.MongoClient(
-    f"mongodb+srv://{username}:{password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
+    f"mongodb+srv://{db_username}:{db_password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
 )  # database connection establishing
 
 db = client["mydatabase"]
@@ -40,13 +40,13 @@ def user_func():
     user = User(users_col, books_col)
 
     print("\n1. User Login\n2. User Sign Up")
-    input_type = int(input("Choose an option for continue: "))
+    user_input_type = int(input("Choose an option for continue: "))
 
-    if input_type == 1:
-        username = input("\nUsername: ")
-        password = input("Password: ")
+    if user_input_type == 1:
+        user_username = input("\nUsername: ")
+        user_password = input("Password: ")
 
-        response = user.login(username, password)
+        response = user.login(user_username, user_password)
         if response["status"] == Status.Fail:
             print(response["message"])
 
@@ -76,11 +76,11 @@ def user_func():
 
                 input("\nPress enter to continue: ")
 
-    elif input_type == 2:
-        username = input("\nUsername: ")
-        password = input("Password: ")
+    elif user_input_type == 2:
+        user_username = input("\nUsername: ")
+        user_password = input("Password: ")
 
-        response = user.register(username, password)
+        response = user.register(user_username, user_password)
         print(response["message"])
 
 
@@ -90,8 +90,8 @@ def librarian_func():
     """
     librarian = Librarian(librarian_col, books_col, users_col)
 
-    password = input("Password: ")
-    response = librarian.login(password)
+    librarian_password = input("Password: ")
+    response = librarian.login(librarian_password)
     if response["status"] == Status.Fail:
         print(response["message"])
 
@@ -124,9 +124,6 @@ def librarian_func():
 
 
 while 1:
-    """
-    Loop for user interface
-    """
     print("\nWelcome to the Library Management System.")
     print("\n1. User Operations\n2. Librarian Operations\n3. Close Application")
 
