@@ -1,6 +1,11 @@
+"""
+Class file for handling status codes
+"""
+
+
 class Status:
     """
-    Status codes
+    Status code class
     """
 
     Success = 0
