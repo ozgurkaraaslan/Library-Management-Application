@@ -11,8 +11,9 @@ import json  # library for json operations
 
 from src.classes.user import User
 from src.classes.librarian import Librarian
+from src.classes.status import Status
 
-# libraries for user and librarian classes
+# library imports for user, librarian and status classes
 
 with open("src/config/db_auth.json") as file:
     data = json.load(file)
@@ -46,7 +47,7 @@ def user_func():
         password = input("Password: ")
 
         response = user.login(username, password)
-        if not response["status"]:
+        if response["status"] == Status.Fail:
             print(response["message"])
 
         else:
@@ -66,7 +67,7 @@ def user_func():
 
                 print(response["message"])
 
-                if response["status"] == 4:
+                if response["status"] == Status.LogOut:
                     break
                 if "data" in response.keys():
                     print("\nResult: ")
@@ -80,10 +81,7 @@ def user_func():
         password = input("Password: ")
 
         response = user.register(username, password)
-        if response["status"]:
-            print(response["message"])
-        else:
-            print(response["message"])
+        print(response["message"])
 
 
 def librarian_func():
@@ -94,7 +92,7 @@ def librarian_func():
 
     password = input("Password: ")
     response = librarian.login(password)
-    if not response["status"]:
+    if response["status"] == Status.Fail:
         print(response["message"])
 
     else:
@@ -115,9 +113,9 @@ def librarian_func():
 
             print("\n" + response["message"])
 
-            if response["status"] == 4:
+            if response["status"] == Status.LogOut:
                 break
-            if "data" in response.keys() and (response["status"] != 0):
+            if "data" in response.keys() and (response["status"] != Status.Fail):
                 print("\nResult: ")
                 for _data in response["data"]:
                     print(_data)
