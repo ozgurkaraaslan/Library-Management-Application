@@ -2,8 +2,8 @@
 Module for library admin (librarian) operations
 """
 
-from src.classes.book import Book
-from src.classes.status import Status
+from .book import Book
+from .status import Status
 
 
 class Librarian:
