@@ -283,7 +283,7 @@ class BookSearch:
         msg = []
         data = self.books_col.find({"title": title}, {"_id": 0})
         _data = None
-
+        print(data)
         for _data in data:
             msg.append(_data)
 
