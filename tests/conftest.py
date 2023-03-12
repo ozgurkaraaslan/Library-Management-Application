@@ -3,88 +3,77 @@ import yaml
 import pymongo
 import mongomock
 
-with open("db_auth.yaml", encoding="utf8") as file:
-    data = yaml.safe_load(file)
-
-db_username = data["username"]
-db_password = data["password"]
-# database authentication parameters
-
-client = pymongo.MongoClient(
-    f"mongodb+srv://{db_username}:{db_password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
-)  # database connection establishing
-
-db = client["mydatabase"]
-books_col = db["books"]
-
+from src.classes.book import Book, BookSearch
+from src.classes.user import User
+from src.classes.librarian import Librarian
 
 def conn():
+    with open("db_auth.yaml", encoding="utf8") as file:
+        data = yaml.safe_load(file)
+
+    db_username = data["username"]
+    db_password = data["password"]
+
     return pymongo.MongoClient(
         f"mongodb+srv://{db_username}:{db_password}@cluster0.yah8b9u.mongodb.net/?retryWrites=true&w=majority"
     )
 
-
 @pytest.fixture()
-def _mock_mongo(monkeypatch):
-    _client = mongomock.MongoClient()
+def mock_mongo(monkeypatch):
+    client = mongomock.MongoClient()
 
     def fake_mongo():
-        return _client
+        user = {"username": "Ozgur", "password": "1234", "occupied_books": None}
+        book = {'title': '1984', 'id': 16, 'author': 'George Orwell', 'subject_category': 'Novel', 'publication_date': '2012', 'physical_address': 'DD101', 'book_state': 'Reserved'}
+        librarian = {"librarian_password": "13579"}
 
-    monkeypatch.setattr("tests.conftest.conn", fake_mongo)
-    return _client
+        db = client["mydatabase"]
+        books_col = db["books"]
+        users_col = db["users"]
+        librarian_col = db["librarian"]
 
+        books_col.insert_one(book)
+        users_col.insert_one(user)
+        librarian_col.insert_one(librarian)
 
-@pytest.fixture
-def search_by_title():
+        return client
 
-    title = "1984"
-    msg = []
-    expected_result = books_col.find({"title": title}, {"_id": 0})
-    print(expected_result)
-    for _data in expected_result:
-        msg.append(_data)
+    monkeypatch.setattr("tests.connection.conn", fake_mongo)
+    fake_mongo()
+    return client
 
-    return msg
+@pytest.fixture()
+def book_search_object_mock(mock_mongo):    
+    db = mock_mongo["mydatabase"]
+    books_col = db["books"]
 
+    book_search = BookSearch(books_col)
+    return book_search
 
-@pytest.fixture
-def search_by_author():
-    author = "George Orwell"
-    msg = []
-    expected_result = books_col.find({"author": author}, {"_id": 0})
-    for _data in expected_result:
-        msg.append(_data)
+@pytest.fixture()
+def book_object_mock(mock_mongo):  
+    db = mock_mongo["mydatabase"]
+    books_col = db["books"]
+    users_col = db["users"]
 
-    return msg
+    book = Book(users_col, books_col)
+    return book
 
+@pytest.fixture()
+def user_object_mock(mock_mongo):  
+    db = mock_mongo["mydatabase"]
+    books_col = db["books"]
+    users_col = db["users"]
 
-@pytest.fixture
-def search_by_subject_category():
-    subject_category = "Novel"
-    msg = []
-    expected_result = books_col.find({"subject_category": subject_category}, {"_id": 0})
-    for _data in expected_result:
-        msg.append(_data)
+    user = User(users_col, books_col)
+    return user
 
-    return msg
+@pytest.fixture()
+def librarian_object_mock(mock_mongo):  
+    db = mock_mongo["mydatabase"]
+    librarian_col = db["librarian"]
+    books_col = db["books"]
+    users_col = db["users"]
 
-
-@pytest.fixture
-def search_by_publication_date():
-    publication_date = "2012"
-    msg = []
-    expected_result = books_col.find({"publication_date": publication_date}, {"_id": 0})
-    for _data in expected_result:
-        msg.append(_data)
-
-    return msg
-
-
-@pytest.fixture
-def show():
-    msg = []
-    for _data in books_col.find({}, {"_id": 0}):
-        msg.append(_data)
-
-    return msg
+    librarian = Librarian(librarian_col, books_col, users_col)
+    return librarian
