@@ -23,8 +23,8 @@ def mock_mongo(monkeypatch):
     client = mongomock.MongoClient()
     
     def fake_mongo():
-        user = {"username": "Ozgur", "password": "1234", "occupied_books": None}
-        book = {'title': '1984', 'id': 16, 'author': 'George Orwell', 'subject_category': 'Novel', 'publication_date': '2012', 'physical_address': 'DD101', 'book_state': 'Reserved'}
+        user = {"username": "Ozgur", "password": "1234", "occupied_books": ["-1"]}
+        book = {'title': '1984', 'id': 0, 'author': 'George Orwell', 'subject_category': 'Novel', 'publication_date': '2012', 'physical_address': 'DD101', 'book_state': 'Free'}
         librarian = {"librarian_password": "13579"}
 
         database = client["mydatabase"]
@@ -37,7 +37,7 @@ def mock_mongo(monkeypatch):
         librarian_col.insert_one(librarian)
         return database
 
-    monkeypatch.setattr("tests.connection.conn", fake_mongo)
+    monkeypatch.setattr("tests.conftest.conn", fake_mongo)
     return fake_mongo()
 
 
@@ -66,7 +66,7 @@ def book_search_object_mock(books_col):
 
 @pytest.fixture()
 def book_object_mock(users_col, books_col):
-    book = Book(users_col, books_col)
+    book = Book(users_col, books_col, "Ozgur")
     return book
 
 @pytest.fixture()
