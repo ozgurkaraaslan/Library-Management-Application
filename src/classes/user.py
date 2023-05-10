@@ -2,8 +2,8 @@
 Module for library user operations
 """
 
-from .book import Book
-from .status import Status
+from src.classes.book import Book
+from src.classes.status import Status
 
 
 class User:

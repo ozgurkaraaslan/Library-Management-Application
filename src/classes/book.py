@@ -1,7 +1,8 @@
 """
 Module for all book operations
 """
-from .status import Status
+
+from src.classes.status import Status
 
 
 class Book:
